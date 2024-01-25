@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff7352c2-6bb6-4a5f-a75b-cea343b42d0e" name="Changes" comment="version 13. GUI without Bigram and Statistical">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="ff7352c2-6bb6-4a5f-a75b-cea343b42d0e" name="Changes" comment="version 14. StatisticalAnalysis - changeCharacters">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/StatisticalAnalysis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/StatisticalAnalysis.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -186,7 +185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706092466797</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="version 14. StatisticalAnalysis - changeCharacters">
+      <option name="closed" value="true" />
+      <created>1706164543999</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1706164543999</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -205,7 +212,8 @@
     <MESSAGE value="version 11. BruteForce, StatisticalAnalysis" />
     <MESSAGE value="version 12. Time" />
     <MESSAGE value="version 13. GUI without Bigram and Statistical" />
-    <option name="LAST_COMMIT_MESSAGE" value="version 13. GUI without Bigram and Statistical" />
+    <MESSAGE value="version 14. StatisticalAnalysis - changeCharacters" />
+    <option name="LAST_COMMIT_MESSAGE" value="version 14. StatisticalAnalysis - changeCharacters" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

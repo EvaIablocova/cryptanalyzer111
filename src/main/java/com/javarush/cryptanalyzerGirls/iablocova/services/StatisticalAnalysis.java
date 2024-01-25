@@ -47,7 +47,7 @@ public class StatisticalAnalysis implements Function {
         return new Result(ResultCode.OK);
     }
 
-    //в статистическом анализе сначала надо сделать статитстику вхождения каждого символа в текст в заданном файле
+    //в статистическом анализе сначала надо сделать статистику вхождения каждого символа в текст в заданном файле
     private static Map<Character, Integer> countCharactersInEncodedFile(File file) {
         // Создаем LinkedHashMap, который сохраняет порядок вставки
         Map<Character, Integer> sortedCharCountMap = new LinkedHashMap<>();
@@ -133,18 +133,18 @@ public class StatisticalAnalysis implements Function {
 
     private static void makeMapsEqual(Map<Character, Integer> dictionaryStatistics, Map<Character, Integer> encodedStatistics) {
 
-        // Создаем копии мапов
+        // Создаем копии maps
         Map<Character, Integer> commonInDictionary = new HashMap<>(dictionaryStatistics);
         Map<Character, Integer> commonInEncoded = new HashMap<>(encodedStatistics);
 
-        // Удаляем из каждой копии элементы, которые отсутствуют в другой мапе
+        // Удаляем из каждой копии элементы, которые отсутствуют в другой map
         commonInDictionary.keySet().retainAll(encodedStatistics.keySet());
         commonInEncoded.keySet().retainAll(dictionaryStatistics.keySet());
 
-        // Теперь обновляем исходные мапы
+        // Теперь обновляем исходные map
         dictionaryStatistics.keySet().retainAll(commonInDictionary.keySet());
         encodedStatistics.keySet().retainAll(commonInEncoded.keySet());
-        // Выводим оба мэпа
+        // Выводим оба maps
         System.out.println("Dictionary Map: ");
         int i = 1;
         for (Map.Entry<Character, Integer> entry : dictionaryStatistics.entrySet()) {

@@ -16,7 +16,7 @@ public class BruteForce implements Function {
     public Result execute(String[] parameters) {
 //        long startTime = System.currentTimeMillis();
 
-       //перебираем ключи, сравниваем по количеству совпавших регулярок - сохраняем вариант, где нашли совпадение с регуляркой
+        //перебираем ключи, сравниваем по количеству совпавших регулярок - сохраняем вариант, где нашли совпадение с регуляркой
 
         int key = decodeAllVariants(parameters);
         parameters[2] = Integer.toString(key);

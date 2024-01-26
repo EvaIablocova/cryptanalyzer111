@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ff7352c2-6bb6-4a5f-a75b-cea343b42d0e" name="Changes" comment="version 14. StatisticalAnalysis - changeCharacters">
+    <list default="true" id="ff7352c2-6bb6-4a5f-a75b-cea343b42d0e" name="Changes" comment="version 15. Warnings, files">
+      <change afterPath="$PROJECT_DIR$/src/image/aoao.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/EntryPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/EntryPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/LoginWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/LoginWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/Swing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/Swing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/encoded.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/encoded.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/BigramMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/BigramMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/BruteForce.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/BruteForce.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/StatisticalAnalysis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/javarush/cryptanalyzerGirls/iablocova/services/StatisticalAnalysis.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,17 +39,20 @@
     <option name="autoscrollToSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/eva/Documents/cryptanalyzer111&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/Users/eva/Documents/cryptanalyzer111/src/image"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.javarush.cryptanalyzerGirls.iablocova" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/image" />
     </key>
   </component>
   <component name="RunManager">
@@ -193,8 +205,33 @@
       <option name="project" value="LOCAL" />
       <updated>1706164543999</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="version 15. Warnings, files">
+      <option name="closed" value="true" />
+      <created>1706165045819</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1706165045820</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="start" />
@@ -213,7 +250,8 @@
     <MESSAGE value="version 12. Time" />
     <MESSAGE value="version 13. GUI without Bigram and Statistical" />
     <MESSAGE value="version 14. StatisticalAnalysis - changeCharacters" />
-    <option name="LAST_COMMIT_MESSAGE" value="version 14. StatisticalAnalysis - changeCharacters" />
+    <MESSAGE value="version 15. Warnings, files" />
+    <option name="LAST_COMMIT_MESSAGE" value="version 15. Warnings, files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

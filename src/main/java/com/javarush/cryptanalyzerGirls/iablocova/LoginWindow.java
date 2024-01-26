@@ -18,9 +18,9 @@ public class LoginWindow extends JDialog{
 
 
 
-        ImageIcon imageIcon = new ImageIcon("/Users/eva/Documents/cryptanalyzer111/image.png");
+        ImageIcon imageIcon = new ImageIcon("src/image/aoao.jpg");
         Image originalImage = imageIcon.getImage();
-        int newWidth = 730; // Новая ширина изображения
+        int newWidth = 800; // Новая ширина изображения
         int newHeight = 600; // Новая высота изображения
         Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
         ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
@@ -59,6 +59,11 @@ public class LoginWindow extends JDialog{
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Закрываем окно
+            }
+        });
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0); // Закрываем всю программу
             }
         });
 

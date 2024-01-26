@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
+
 import com.javarush.cryptanalyzerGirls.iablocova.constants.CryptoAlphabet;
 import com.javarush.cryptanalyzerGirls.iablocova.entity.Result;
 import com.javarush.cryptanalyzerGirls.iablocova.repository.ResultCode;
@@ -52,33 +53,89 @@ public class BigramMethod implements Function{
         }
         return frequencies;
     }
+    /*
+        // Вывод всех возможных вариантов дешифровки
+        public List<String> decodeAllVariants (String[] parameters){
+            List<String> result = new ArrayList<>(); //ff
+            Decode decoder = new Decode();
+            String groupOfDecryptedText = "";
+            try{
+            for (int shift = 0; shift <= lengthOfAlphabet; shift++) {
+                parameters [2] = Integer.toString(shift);
+                decoder.execute(parameters);
 
-    // Вывод всех возможных вариантов дешифровки
-    private void decodeAllVariants (String[] parameters){
+                File fileOutput = new File (parameters[3]);
+                if (!fileOutput.exists()){ fileOutput.createNewFile();}
+
+                String decryptedText = readTextFromFile(fileOutput);
+                groupOfDecryptedText = appendToString (groupOfDecryptedText, decryptedText, shift);
+            }
+
+                File BigramOutput = new File (bigramMetPath);
+                if (!BigramOutput.exists()){ BigramOutput.createNewFile();}
+                rewriteTextToFile(BigramOutput, groupOfDecryptedText);
+
+            } catch (IOException e) {
+            e.printStackTrace();
+        }
+            try {
+                for (int shift = 0; shift <= lengthOfAlphabet; shift++) {
+                    parameters[2] = Integer.toString(shift);
+                    decoder.execute(parameters);
+
+                    File fileOutput = new File(parameters[3]);
+                    if (!fileOutput.exists()) {
+                        System.out.println("Файл для записи не существует: " + fileOutput.getAbsolutePath());
+                        fileOutput.createNewFile();
+                    }
+
+                    String decryptedText = readTextFromFile(fileOutput);
+                    System.out.println("Дешифрованный текст для сдвига " + shift + ": " + decryptedText);
+
+                    groupOfDecryptedText = appendToString(groupOfDecryptedText, decryptedText, shift);
+                }
+
+                File BigramOutput = new File(bigramMetPath);
+                if (!BigramOutput.exists()) {
+                    BigramOutput.createNewFile();
+                }
+                rewriteTextToFile(BigramOutput, groupOfDecryptedText);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return result;//ff
+
+        }
+    */
+    public List<String> decodeAllVariants(String[] parameters) {
+        List<String> result = new ArrayList<>();
         Decode decoder = new Decode();
-        String groupOfDecryptedText = "";
-        try{
-        for (int shift = 0; shift <= lengthOfAlphabet; shift++) {
-            parameters [2] = Integer.toString(shift);
-            decoder.execute(parameters);
 
-            File fileOutput = new File (parameters[3]);
-            if (!fileOutput.exists()){ fileOutput.createNewFile();}
+        try {
+            for (int shift = 0; shift <= lengthOfAlphabet; shift++) {
+                parameters[2] = Integer.toString(shift);
+                decoder.execute(parameters);
 
-            String decryptedText = readTextFromFile(fileOutput);
-            groupOfDecryptedText = appendToString (groupOfDecryptedText, decryptedText, shift);
+                File fileOutput = new File(parameters[3]);
+                if (!fileOutput.exists()) {
+                    System.out.println("Файл для записи не существует: " + fileOutput.getAbsolutePath());
+                    fileOutput.createNewFile();
+                }
+
+                String decryptedText = readTextFromFile(fileOutput);
+                System.out.println("Дешифрованный текст для сдвига " + shift + ": " + decryptedText);
+
+                result.add(decryptedText); // Добавляем дешифрованный текст в список
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-            File BigramOutput = new File (bigramMetPath);
-            if (!BigramOutput.exists()){ BigramOutput.createNewFile();}
-            rewriteTextToFile(BigramOutput, groupOfDecryptedText);
-
-        } catch (IOException e) {
-        e.printStackTrace();
+        return result;
     }
 
 
-    }
 
     private static String appendToString (String baseString, String whatAppend, int shift){
         baseString = baseString + "\n"+ "Дешифрованный текст " + shift + ":" + "\n"+ whatAppend;

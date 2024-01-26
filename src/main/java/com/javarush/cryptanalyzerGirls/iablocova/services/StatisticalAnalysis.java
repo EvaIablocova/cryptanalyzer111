@@ -30,15 +30,56 @@ public class StatisticalAnalysis implements Function {
 
             convertFileToLowerCase (fileDictionary, fileDictionary);
 
+
             Map<Character, Integer> encodedStatistics = countCharactersInEncodedFile(encodedFile);
+
+//            File dictionary = new File(parameters[2]);
+//            if (!dictionary.exists()) {
+//                dictionary.createNewFile();
+//            }
 
             Map<Character, Integer> dictionaryStatistics = countCharactersInDictionaryFile(encodedStatistics, fileDictionary);
 
             makeMapsEqual(dictionaryStatistics, encodedStatistics);
 
             replaceCharactersFromStatistics(encodedFile, decodedFile, encodedStatistics, dictionaryStatistics);
+            //showEditDialog(decodedFile);
+            /*
+            System.out.println("Enter the characters you want to swap or enter 'exit' to quit:");
+            Scanner scanner = new Scanner(System.in);
 
-            changeCharacters (decodedFile);
+            while (true) {
+                System.out.print("Source Character: ");
+                String sourceInput = scanner.nextLine();
+
+                if (sourceInput.equalsIgnoreCase("exit")) {
+                    break;
+                }
+
+                if (sourceInput.length() != 1) {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    continue;
+                }
+
+                char sourceChar = sourceInput.charAt(0);
+
+                System.out.print("Target Character: ");
+                String targetInput = scanner.nextLine();
+
+                if (targetInput.equalsIgnoreCase("exit")) {
+                    break;
+                }
+                if (targetInput.length() != 1) {
+                    System.out.println("Invalid input. Please enter a single character.");
+                    continue;
+                }
+
+                char targetChar = targetInput.charAt(0);
+
+                swapCharactersInFile(decodedFile, sourceChar, targetChar);
+                System.out.println("Characters swapped successfully.");
+            }
+            */
 
         }  catch (IOException e) {
             e.printStackTrace();
@@ -47,7 +88,9 @@ public class StatisticalAnalysis implements Function {
         return new Result(ResultCode.OK);
     }
 
-    //в статистическом анализе сначала надо сделать статистику вхождения каждого символа в текст в заданном файле
+
+
+    //в статистическом анализе сначала надо сделать статитстику вхождения каждого символа в текст в заданном файле
     private static Map<Character, Integer> countCharactersInEncodedFile(File file) {
         // Создаем LinkedHashMap, который сохраняет порядок вставки
         Map<Character, Integer> sortedCharCountMap = new LinkedHashMap<>();
@@ -133,18 +176,18 @@ public class StatisticalAnalysis implements Function {
 
     private static void makeMapsEqual(Map<Character, Integer> dictionaryStatistics, Map<Character, Integer> encodedStatistics) {
 
-        // Создаем копии maps
+        // Создаем копии мапов
         Map<Character, Integer> commonInDictionary = new HashMap<>(dictionaryStatistics);
         Map<Character, Integer> commonInEncoded = new HashMap<>(encodedStatistics);
 
-        // Удаляем из каждой копии элементы, которые отсутствуют в другой map
+        // Удаляем из каждой копии элементы, которые отсутствуют в другой мапе
         commonInDictionary.keySet().retainAll(encodedStatistics.keySet());
         commonInEncoded.keySet().retainAll(dictionaryStatistics.keySet());
 
-        // Теперь обновляем исходные map
+        // Теперь обновляем исходные мапы
         dictionaryStatistics.keySet().retainAll(commonInDictionary.keySet());
         encodedStatistics.keySet().retainAll(commonInEncoded.keySet());
-        // Выводим оба maps
+        // Выводим оба мэпа
         System.out.println("Dictionary Map: ");
         int i = 1;
         for (Map.Entry<Character, Integer> entry : dictionaryStatistics.entrySet()) {
@@ -261,43 +304,6 @@ public class StatisticalAnalysis implements Function {
             rewriteTextToFile(file, newContent.toString());
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void changeCharacters (File decodedFile) {
-        System.out.println("Enter the characters you want to swap or enter 'exit' to quit:");
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            System.out.print("Source Character: ");
-            String sourceInput = scanner.nextLine();
-
-            if (sourceInput.equalsIgnoreCase("exit")) {
-                break;
-            }
-
-            if (sourceInput.length() != 1) {
-                System.out.println("Invalid input. Please enter a single character.");
-                continue;
-            }
-
-            char sourceChar = sourceInput.charAt(0);
-
-            System.out.print("Target Character: ");
-            String targetInput = scanner.nextLine();
-
-            if (targetInput.equalsIgnoreCase("exit")) {
-                break;
-            }
-            if (targetInput.length() != 1) {
-                System.out.println("Invalid input. Please enter a single character.");
-                continue;
-            }
-
-            char targetChar = targetInput.charAt(0);
-
-            swapCharactersInFile(decodedFile, sourceChar, targetChar);
-            System.out.println("Characters swapped successfully.");
         }
     }
 }

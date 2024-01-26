@@ -1,6 +1,14 @@
 package com.javarush.cryptanalyzerGirls.iablocova;
 
 import javax.swing.*;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +24,7 @@ import java.io.FilenameFilter;
 import static com.javarush.cryptanalyzerGirls.iablocova.constants.Paths.input;
 import static com.javarush.cryptanalyzerGirls.iablocova.constants.Paths.encoded;
 import static com.javarush.cryptanalyzerGirls.iablocova.constants.Paths.output;
+import static com.javarush.cryptanalyzerGirls.iablocova.constants.Paths.dictionary;
 import com.javarush.cryptanalyzerGirls.iablocova.LoginWindow;
 import com.javarush.cryptanalyzerGirls.iablocova.view.GUIView;
 import com.javarush.cryptanalyzerGirls.iablocova.services.Encode;
@@ -641,22 +650,14 @@ public class Swing {
         // Ask the user if they want to view the decrypted file
         //openTextFile(filePath);
     }
-    private static void performBigram(JFrame frame) {
-        String filePath = decryptField.getText();
-        if (filePath == null || filePath.isEmpty()) {
-            int confirmFileChoice = JOptionPane.showConfirmDialog(frame,
-                    "Путь файла для дешифрования (BigramMethod) не выбран! Использовать файл по умолчанию?",
-                    "Ошибка",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.ERROR_MESSAGE);
 
-            if (confirmFileChoice == JOptionPane.NO_OPTION) {
-                // Обработка случая, когда выбрано "No" для использования файла по умолчанию
-                // Ваш код здесь
-            } else {
-                filePath = encoded;
-            }
-        } else {
+
+
+    private static void performBigram(JFrame frame) {
+        String filePath = decryptField.getText().isEmpty() ? encoded : decryptField.getText();
+        //String filePath = decryptField.getText();
+        if (filePath == null || filePath.isEmpty()) {
+
             int confirmFileChoice = JOptionPane.showConfirmDialog(frame,
                     "Путь файла для дешифрования (BigramMethod): " + filePath + "\nИспользовать этот файл?(No- файл по умолчанию)",
                     "Подтверждение файла",
@@ -677,7 +678,6 @@ public class Swing {
             JOptionPane.showMessageDialog(frame, "Введите ключ!", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         Object[] options = {"Выбрать файл из папки", "Использовать путь по умолчанию (output.txt)"};
         int saveChoice = JOptionPane.showOptionDialog(frame,
                 "Как сохранить зашифрованный файл?",
@@ -705,25 +705,161 @@ public class Swing {
         } else {
             targetFilePath = output; // Путь по умолчанию
         }
-        BigramMethod bigramMethodService = new BigramMethod();
-        String[] parameters = {null, filePath, key, targetFilePath};
-        Result result = bigramMethodService.execute(parameters);
+        String bigrammetPath = askForBigrammetPath(frame);
+        if (bigrammetPath == null || bigrammetPath.isEmpty()) {
+            statusField.setText("Операция отменена: не указан путь для сохранения всех вариантов дешифровки.");
+            return;
+        }
 
+        String[] parameters = {key, filePath, bigrammetPath, targetFilePath};
+        List<String> decryptedTexts = new BigramMethod().decodeAllVariants(parameters);
+
+        if (decryptedTexts.isEmpty()) {
+            statusField.setText("Дешифровка не удалась");
+            return;
+        }
+        String  keyVariant = displayDecryptionVariants(frame, decryptedTexts);
+        // Вызов метода decodeTextWithKey для дальнейшей обработки расшифрованного текста
+        Result result = decodeTextWithKey(filePath, targetFilePath, keyVariant);
         if (result != null) {
             if (result.getResultCode() == ResultCode.OK) {
                 currentFilePath = targetFilePath;
-                statusField.setText("Файл дешифрован (Birgam). Сохранен в: " + targetFilePath);
+                statusField.setText("Файл дешифрован (BigramMethod). Сохранен в: " + targetFilePath);
             } else {
-                statusField.setText("Ошибка при Bigram анализе: " + result.getErrorMessage());
+                statusField.setText("Ошибка при BigramMethod анализе: " + result.getErrorMessage());
             }
         } else {
-            statusField.setText("Ошибка: результат выполнения Bigram не получен (результат null).");
+            statusField.setText("Ошибка: результат выполнения BigramMethod не получен (результат null).");
+        }
+    }
+
+    private static String displayDecryptionVariants(JFrame frame, List<String> decryptedTexts) {
+        final String[] chosenVariantNumber = {null}; // Массив для хранения номера выбранного варианта
+
+        // Создаем диалоговое окно
+        JDialog dialog = new JDialog(frame, "Выбор варианта дешифровки", true);
+        dialog.setLayout(new BorderLayout());
+
+
+        // Создаем текстовую область для отображения всех вариантов дешифровки
+        JTextArea textArea = new JTextArea();
+        for (int i = 0; i < decryptedTexts.size(); i++) {
+            textArea.append("Вариант " + i + ":\n" + decryptedTexts.get(i) + "\n\n");
+        }
+        textArea.setEditable(false); // Делаем текстовую область только для чтения
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        // Создаем текстовое поле для ввода номера выбранного варианта
+        JTextField variantField = new JTextField(10);
+
+        // Создаем кнопку для подтверждения выбора
+        JButton okButton = new JButton("OK");
+
+        // Изменяем обработчик кнопки OK
+        okButton.addActionListener(e -> {
+            int selectedVariant;
+            try {
+                selectedVariant = Integer.parseInt(variantField.getText());
+                if (selectedVariant >= 0 && selectedVariant < decryptedTexts.size()) {
+                    chosenVariantNumber[0] = Integer.toString(selectedVariant);
+                    dialog.dispose(); // Закрываем диалоговое окно
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Введите корректный номер варианта!");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Введите корректный номер варианта!");
+            }
+        });
+
+        // Добавляем компоненты к диалоговому окну
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        JPanel inputPanel = new JPanel();
+        inputPanel.add(new JLabel("Введите номер варианта:"));
+        inputPanel.add(variantField);
+        inputPanel.add(okButton);
+        dialog.add(inputPanel, BorderLayout.SOUTH);
+
+        // Настройка и отображение диалогового окна
+        dialog.setSize(600, 400);
+        dialog.setLocationRelativeTo(frame);
+
+        dialog.setVisible(true);
+        return chosenVariantNumber[0];
+    }
+
+
+    private static String askForBigrammetPath(JFrame frame) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
+        fileChooser.setDialogTitle("Выберите место для сохранения всех вариантов дешифровки");
+        int userSelection = fileChooser.showSaveDialog(frame);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            return fileToSave.getAbsolutePath();
+        } else {
+            return null; // Пользователь отменил выбор
+        }
+    }
+    private static void displayDecryptionOptions(JFrame frame, String bigrammetPath, String outputFilePath) {
+        // Читаем текст из файла bigrammet
+        String bigrammetText = readFile(bigrammetPath);
+        if (bigrammetText == null || bigrammetText.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Не удалось прочитать файл с вариантами дешифровки.", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
+        // Создаем текстовую область для отображения текста
+        JTextArea textArea = new JTextArea(bigrammetText);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
 
-        // Ask the user if they want to view the decrypted file
-        //openTextFile(filePath);
+        // Создаем и добавляем кнопку для выбора варианта дешифровки
+        JButton selectButton = new JButton("Выбрать и сохранить");
+        selectButton.addActionListener(e -> {
+            String selectedText = textArea.getSelectedText();
+            if (selectedText != null && !selectedText.isEmpty()) {
+                saveToFile(selectedText, outputFilePath);
+                JOptionPane.showMessageDialog(frame, "Выбранный вариант сохранен в " + outputFilePath);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Пожалуйста, выберите текст для сохранения.", "Предупреждение", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        // Добавляем текстовую область и кнопку на панель
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(selectButton, BorderLayout.SOUTH);
+
+        // Добавляем панель в окно
+        frame.getContentPane().removeAll();
+        frame.add(panel);
+        frame.revalidate();
+        frame.repaint();
     }
+
+    private static void saveToFile(String text, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(text);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private static Result decodeTextWithKey(String filePath, String outputFilePath, String key) {
+        BigramMethod bigramMethodService = new BigramMethod();
+        String[] parameters = {"6", filePath, key,  outputFilePath};
+
+        return new Decode().execute(parameters);
+    }
+
+
+
+
     private static void performEncodeStatic(JFrame frame) {
         // Получаем путь к файлу из глобальной переменной
         String filePath = encryptField.getText();
@@ -811,36 +947,7 @@ public class Swing {
     }
     private static void performLetterSubstitution(JFrame frame) {
         String filePath = encoded;
-        /*
-        if (filePath == null || filePath.isEmpty()) {
-            int confirmFileChoice = JOptionPane.showConfirmDialog(frame,
-                    "Путь файла для дешифрования (StatisticalAnalysis) не выбран! Использовать файл по умолчанию?",
-                    "Ошибка",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.ERROR_MESSAGE);
 
-            if (confirmFileChoice == JOptionPane.NO_OPTION) {
-                // Обработка случая, когда выбрано "No" для использования файла по умолчанию
-                // Ваш код здесь
-            } else {
-                filePath = "encoded.txt";
-            }
-        } else {
-            int confirmFileChoice = JOptionPane.showConfirmDialog(frame,
-                    "Путь файла для дешифрования (StatisticalAnalysis): " + filePath + "\nИспользовать этот файл?(No- файл по умолчанию)",
-                    "Подтверждение файла",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-            if (confirmFileChoice == JOptionPane.NO_OPTION) {
-                // Обработка случая, когда выбрано "No" для использования файла по умолчанию
-                filePath = "encoded.txt";
-            } else {
-                // Обработка случая, когда выбрано "Yes" для использования выбранного файла
-            }
-        }
-
-         */
 // Получаем ключ, введенный пользователем
         String dir = dictionaryField.getText();
         String dictionaryFilePath;
@@ -857,7 +964,7 @@ public class Swing {
                 JOptionPane.showMessageDialog(frame, "Введите путь к словарю!", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
             } else {
-                dictionaryFilePath = "dictionary.txt"; // Путь к словарю по умолчанию
+                dictionaryFilePath = dictionary; // Путь к словарю по умолчанию
             }
         } else {
             dictionaryFilePath = dir; // Используем указанный путь к словарю
@@ -890,8 +997,9 @@ public class Swing {
             targetFilePath = output; // Путь по умолчанию
         }
 
+
         StatisticalAnalysis statistocalanalysisService = new StatisticalAnalysis();
-        String[] parameters = {null, filePath, dir, targetFilePath};
+        String[] parameters = {"5", filePath, dictionaryFilePath, targetFilePath};
         Result result = statistocalanalysisService.execute(parameters);
 
         if (result != null) {
@@ -938,6 +1046,31 @@ public class Swing {
             controlPanel.add(targetLetterField);
             controlPanel.add(applyChangesButton);
 
+            JButton viewOriginalFileButton = new JButton("Посмотреть изначальный файл");
+            controlPanel.add(viewOriginalFileButton);
+
+            viewOriginalFileButton.addActionListener(e -> {
+                // Чтение текста из файла "input.txt"
+                String originalText = readFile(input); // Убедитесь, что метод readFile корректно реализован
+
+                // Создаем текстовую область для отображения оригинального текста
+                JTextArea originalTextArea = new JTextArea(originalText);
+                originalTextArea.setLineWrap(true);
+                originalTextArea.setWrapStyleWord(true);
+                originalTextArea.setEditable(false);
+
+                // Создаем панель прокрутки для текстовой области
+                JScrollPane originalScrollPane = new JScrollPane(originalTextArea);
+
+                // Создаем и отображаем диалоговое окно с текстовой областью
+                JDialog originalTextDialog = new JDialog(frame, "Изначальный текст", true);
+                originalTextDialog.setLayout(new BorderLayout());
+                originalTextDialog.add(originalScrollPane, BorderLayout.CENTER);
+                originalTextDialog.setSize(600, 400);
+                originalTextDialog.setLocationRelativeTo(frame);
+                originalTextDialog.setVisible(true);
+            });
+
 // Создаем панель прокрутки и добавляем в нее текстовую область.
             JScrollPane scrollPane = new JScrollPane(textArea);
 
@@ -958,8 +1091,16 @@ public class Swing {
             }
 
 
+
+
         }
+
     }
+
+
+
+
+
 
 
     // Дополнительный метод для чтения содержимого файла
